@@ -8,13 +8,14 @@ const ActiveQuiz = props => (
     <p className={classes.question}>
       <span>
         <strong>1.</strong>&nbsp;
-        Hi!
+        {props.question}
       </span>
       <small>4 out of 12</small>
     </p>
 
     <AnswersList 
       answers={props.answers}
+      onAnswerClick={props.onAnswerClick}
     />
   </div>
 )
