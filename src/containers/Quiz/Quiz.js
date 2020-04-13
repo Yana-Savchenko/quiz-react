@@ -9,10 +9,11 @@ class Quiz extends React.Component {
   state = {
     activeQuestion: 0,
     answerState: null,
-    isFinished: true,
+    isFinished: false,
+    results: {},
     quiz: [
       {
-        id: 1,
+        id: 0,
         question: 'Question 1',
         rightAnswerId: 2,
         answers: [
@@ -35,7 +36,7 @@ class Quiz extends React.Component {
         ]
       },
       {
-        id: 2,
+        id: 1,
         question: 'Question 2',
         rightAnswerId: 3,
         answers: [
@@ -70,8 +71,14 @@ class Quiz extends React.Component {
     }
 
     const question = this.state.quiz[this.state.activeQuestion];
+    const results = this.state.results;
 
     if (question.rightAnswerId === answerId) {
+      if (!results[question.id]) {
+        results[this.state.activeQuestion] = 'success';
+        this.setState({ results })
+
+      }
       this.setState({
         answerState: { [answerId]: 'success' }
       })
@@ -89,10 +96,22 @@ class Quiz extends React.Component {
       }, 1000)
 
     } else {
+      results[question.id] = 'error';
       this.setState({
-        answerState: { [answerId]: 'error' }
+        answerState: { [answerId]: 'error' },
+        results
       })
     }
+
+  }
+
+  retryHandler = () => {
+    this.setState({
+      activeQuestion: 0,
+      answerState: null,
+      isFinished: false,
+      results: {},
+    })
 
   }
 
@@ -108,7 +127,9 @@ class Quiz extends React.Component {
           {
             this.state.isFinished
               ? <FinishQuiz
-
+                results={this.state.results}
+                quiz={this.state.quiz}
+                onRetry={this.retryHandler}
               />
               : <ActiveQuiz
                 answers={this.state.quiz[this.state.activeQuestion].answers}
