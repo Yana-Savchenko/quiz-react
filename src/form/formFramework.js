@@ -38,3 +38,31 @@ export function createFormControls() {
     option4: createOptionControl(4),
   }
 }
+
+export function validate(value, validators = null) {
+
+  if (!validators) {
+    return true;
+  }
+
+  let isValid = true;
+
+  if (validators.required) {
+    isValid = value.trim() !== '' && isValid;
+  }
+
+  return isValid;
+}
+
+export function validateForm(formControls) {
+
+  let isFormValid = true;
+
+  for (let control in formControls) {
+    if (formControls.hasOwnProperty(control)) {
+      isFormValid = formControls[control].valid && isFormValid;
+    }
+  }
+
+  return isFormValid;
+}
