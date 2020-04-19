@@ -1,4 +1,5 @@
 import React from 'react';
+import axios from 'axios'
 
 import classes from './QuizCreator.module.css';
 import Button from '../../components/UI/Button/Button';
@@ -44,8 +45,21 @@ export default class QuizCreator extends React.Component {
 
   }
 
-  createQuizHandler = (e) => {
-    console.log('quiz', this.state.quiz);
+  createQuizHandler = async () => {
+
+    try {
+      await axios.post('https://react-quiz-e5af4.firebaseio.com/quizes.json', this.state.quiz);
+
+      this.setState({
+        quiz: [],
+        isFormValid: false,
+        rightAnswerId: 1,
+        formControls: createFormControls(),
+      })
+    } catch (error) {
+      console.log(error);
+    }
+
   }
 
   changeHandler = (value, controlName) => {
@@ -89,7 +103,6 @@ export default class QuizCreator extends React.Component {
   }
 
   selectChangeHandler = e => {
-    console.log(e);
     this.setState({ rightAnswerId: +e.target.value })
   }
 
@@ -132,7 +145,6 @@ export default class QuizCreator extends React.Component {
               type="success"
               onClick={this.createQuizHandler}
               disabled={!this.state.quiz.length}
-
             >
               Create quize
             </Button>
