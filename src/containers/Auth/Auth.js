@@ -1,4 +1,5 @@
 import React from 'react';
+import axios from 'axios';
 
 import classes from './Auth.module.css';
 import Button from '../../components/UI/Button/Button';
@@ -36,12 +37,34 @@ export default class Auth extends React.Component {
     }
   }
 
-  loginHandler = () => {
-
+  loginHandler = async () => {
+    const loginData = {
+      email: this.state.formControls.email.value,
+      password: this.state.formControls.password.value,
+      returnSecureToken: true,
+    }
+    try {
+      const res = await axios.post('https://identitytoolkit.googleapis.com/v1/accounts:signInWithPassword?key=AIzaSyDyA-aecvDqV5HfBc49Os84hEbJdBgKX7Q', loginData);
+      console.log('login res: ', res);
+    } catch (error) {
+      console.log(error);
+    }
   }
 
-  registerHandler = () => {
-
+  registerHandler = async () => {
+    console.log('!!!');
+    
+    const authData = {
+      email: this.state.formControls.email.value,
+      password: this.state.formControls.password.value,
+      returnSecureToken: true,
+    }
+    try {
+      const res = await axios.post('https://identitytoolkit.googleapis.com/v1/accounts:signUp?key=AIzaSyDyA-aecvDqV5HfBc49Os84hEbJdBgKX7Q', authData);
+      console.log('auth res: ', res);
+    } catch (error) {
+      console.log(error);
+    }
   }
 
   submitHandler = (e) => {
@@ -121,7 +144,7 @@ export default class Auth extends React.Component {
 
             <Button
               type="success"
-              onclick={this.loginHandler}
+              onClick={this.loginHandler}
               disabled={!this.state.isFormValid}
             >
               Log in
@@ -129,7 +152,7 @@ export default class Auth extends React.Component {
 
             <Button
               type="primary"
-              onclick={this.registerHandler}
+              onClick={this.registerHandler}
               disabled={!this.state.isFormValid}
             >
               Sign up
